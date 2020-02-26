@@ -125,6 +125,7 @@ class Exchange(Enum):
     DERIBIT = "DERIBIT"
     GATEIO = "GATEIO"
     BITSTAMP = "BITSTAMP"
+    BOBOO="BOBOO" #www.boboo.com
 
     # Special Function
     LOCAL = "LOCAL"         # For local generated data
