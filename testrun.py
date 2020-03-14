@@ -16,8 +16,9 @@ from vnpy.gateway.binance import BinanceGateway
 # from vnpy.gateway.femas import FemasGateway
 # from vnpy.gateway.tiger import TigerGateway
 # from vnpy.gateway.oes import OesGateway
-# from vnpy.gateway.okex import OkexGateway
+from vnpy.gateway.okex import OkexGateway
 from vnpy.gateway.huobi import HuobiGateway
+from vnpy.gateway.boboo import BobooGateway
 # from vnpy.gateway.bitfinex import BitfinexGateway
 # from vnpy.gateway.onetoken import OnetokenGateway
 # from vnpy.gateway.okexf import OkexfGateway
@@ -72,7 +73,8 @@ def main():
     # main_engine.add_gateway(TigerGateway)
     # main_engine.add_gateway(OesGateway)
     # main_engine.add_gateway(OkexGateway)
-    main_engine.add_gateway(HuobiGateway)
+    # main_engine.add_gateway(HuobiGateway)
+    main_engine.add_gateway(BobooGateway)
     # main_engine.add_gateway(BitfinexGateway)
     # main_engine.add_gateway(OnetokenGateway)
     # main_engine.add_gateway(OkexfGateway)

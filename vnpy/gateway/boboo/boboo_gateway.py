@@ -38,8 +38,8 @@ from vnpy.trader.event import EVENT_TIMER
 from vnpy.event import Event
 
 
-REST_HOST = "https://www.boboo.com"
-WEBSOCKET_TRADE_HOST = "wss://wsapi.boboo.com"
+REST_HOST = "https://api.boboo.com"
+WEBSOCKET_TRADE_HOST = "wss://wsapi.boboo.com/openapi/ws"
 WEBSOCKET_DATA_HOST = "wss://wsapi.boboo.com"
 
 STATUS_BOBOO2VT = {
@@ -260,7 +260,7 @@ class BobooRestApi(RestClient):
         self.query_account()
         self.query_order()
         self.query_contract()
-        # self.start_user_stream()
+        self.start_user_stream()
 
     def query_time(self):
         """"""
@@ -373,40 +373,40 @@ class BobooRestApi(RestClient):
             extra=req
         )
 
-    # def start_user_stream(self):
-    #     """"""
-    #     data = {
-    #         "security": Security.API_KEY
-    #     }
-    #
-    #     self.add_request(
-    #         method="POST",
-    #         path="/api/v1/userDataStream",
-    #         callback=self.on_start_user_stream,
-    #         data=data
-    #     )
+    def start_user_stream(self):
+        """"""
+        data = {
+            "security": Security.SIGNED
+        }
 
-    # def keep_user_stream(self):
-    #     """"""
-    #     self.keep_alive_count += 1
-    #     if self.keep_alive_count < 1800:
-    #         return
-    #
-    #     data = {
-    #         "security": Security.API_KEY
-    #     }
-    #
-    #     params = {
-    #         "listenKey": self.user_stream_key
-    #     }
-    #
-    #     self.add_request(
-    #         method="PUT",
-    #         path="/api/v1/userDataStream",
-    #         callback=self.on_keep_user_stream,
-    #         params=params,
-    #         data=data
-    #     )
+        self.add_request(
+            method="POST",
+            path="/openapi/v1/userDataStream",
+            callback=self.on_start_user_stream,
+            data=data
+        )
+
+    def keep_user_stream(self):
+        """"""
+        self.keep_alive_count += 1
+        if self.keep_alive_count < 1800:
+            return
+
+        data = {
+            "security": Security.API_KEY
+        }
+
+        params = {
+            "listenKey": self.user_stream_key
+        }
+
+        self.add_request(
+            method="PUT",
+            path="/openapi/v1/userDataStream",
+            callback=self.on_keep_user_stream,
+            params=params,
+            data=data
+        )
 
     def on_query_time(self, data, request):
         """"""
@@ -518,17 +518,17 @@ class BobooRestApi(RestClient):
         """"""
         pass
 
-    # def on_start_user_stream(self, data, request):
-    #     """"""
-    #     self.user_stream_key = data["listenKey"]
-    #     self.keep_alive_count = 0
-    #     url = WEBSOCKET_TRADE_HOST + self.user_stream_key
-    #
-    #     self.trade_ws_api.connect(url, self.proxy_host, self.proxy_port)
+    def on_start_user_stream(self, data, request):
+        """"""
+        self.user_stream_key = data["listenKey"]
+        self.keep_alive_count = 0
+        url = WEBSOCKET_TRADE_HOST + self.user_stream_key
 
-    # def on_keep_user_stream(self, data, request):
-    #     """"""
-    #     pass
+        self.trade_ws_api.connect(url, self.proxy_host, self.proxy_port)
+
+    def on_keep_user_stream(self, data, request):
+        """"""
+        pass
 
     def query_history(self, req: HistoryRequest):
         """"""
